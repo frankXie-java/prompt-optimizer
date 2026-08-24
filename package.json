@@ -7,7 +7,7 @@
     "optimize-prompt": "src/cli.js"
   },
   "scripts": {
-    "test": "node --test \"src/**/*.test.js\""
+    "test": "node --test src/*.test.js"
   },
   "engines": {
     "node": ">=20"
