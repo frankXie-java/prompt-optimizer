@@ -1,0 +1,38 @@
+{
+  "name": "prompt-optimizer",
+  "version": "0.1.0",
+  "description": "Local CLI tool to optimize prompts via OpenAI-compatible LLM endpoints",
+  "type": "module",
+  "bin": {
+    "optimize-prompt": "src/cli.js"
+  },
+  "scripts": {
+    "test": "node --test \"src/**/*.test.js\""
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "author": "frankXie-java <249912786+frankXie-java@users.noreply.github.com> (https://github.com/frankXie-java)",
+  "license": "MIT",
+  "keywords": [
+    "cli",
+    "prompt",
+    "prompt-optimization",
+    "llm",
+    "openai",
+    "ai",
+    "nodejs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frankXie-java/prompt-optimizer.git"
+  },
+  "homepage": "https://github.com/frankXie-java/prompt-optimizer#readme",
+  "bugs": {
+    "url": "https://github.com/frankXie-java/prompt-optimizer/issues"
+  },
+  "dependencies": {
+    "chalk": "^6.0.0",
+    "commander": "^15.0.0"
+  }
+}
