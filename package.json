@@ -4,7 +4,8 @@
   "description": "Local CLI tool to optimize prompts via OpenAI-compatible LLM endpoints",
   "type": "module",
   "bin": {
-    "optimize-prompt": "src/cli.js"
+    "optimize-prompt": "src/cli.js",
+    "optimize-prompt-mcp": "src/mcp/server.js"
   },
   "scripts": {
     "test": "node --test src/*.test.js"
@@ -32,7 +33,9 @@
     "url": "https://github.com/frankXie-java/prompt-optimizer/issues"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
     "chalk": "^6.0.0",
-    "commander": "^15.0.0"
+    "commander": "^15.0.0",
+    "zod": "^3.23.0"
   }
 }
