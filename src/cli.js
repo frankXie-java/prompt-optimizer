@@ -9,6 +9,7 @@ import path from 'node:path';
 import { loadConfig, saveConfig, getConfigOrThrow } from './config.js';
 import { buildMessages, extractOptimizedPrompt } from './optimize.js';
 import { chat } from './llm.js';
+import { loadDocsFromDir } from './docs.js';
 
 /**
  * Reads all of stdin as a string.
@@ -74,7 +75,8 @@ async function runInit() {
         console.error(chalk.red('All fields are required.'));
         process.exit(1);
       }
-      await saveConfig({ base_url, api_key, model });
+      const docs_dir = await nextAnswer('docs_dir (optional, press Enter to skip): ', rl);
+      await saveConfig({ base_url, api_key, model, ...(docs_dir ? { docs_dir } : {}) });
       console.log(chalk.green('Config saved.'));
     } finally {
       if (rl) rl.close();
@@ -87,7 +89,7 @@ async function runInit() {
 
 /**
  * Main optimize flow: read stdin prompt, optional codebase, call LLM, write output.
- * @param {object} opts - { codebase?: string, output?: string }
+ * @param {object} opts - { codebase?: string, codebaseDir?: string, output?: string }
  */
 async function runOptimize(opts) {
   try {
@@ -113,6 +115,12 @@ async function runOptimize(opts) {
       }
     }
 
+    // --codebase and --codebase-dir are mutually exclusive
+    if (opts.codebase && opts.codebaseDir) {
+      console.error(chalk.red('Cannot use both --codebase and --codebase-dir. Choose one.'));
+      process.exit(1);
+    }
+
     let codebaseContent = null;
     if (opts.codebase) {
       try {
@@ -127,6 +135,15 @@ async function runOptimize(opts) {
         codebaseContent = await fs.readFile(opts.codebase, 'utf8');
       } catch (err) {
         console.error(chalk.red(`--codebase file not found: ${opts.codebase}`));
+        process.exit(1);
+      }
+    } else if (opts.codebaseDir) {
+      try {
+        const result = await loadDocsFromDir(opts.codebaseDir);
+        codebaseContent = result.content || null;
+        console.log(chalk.gray(`Loaded ${result.fileCount} docs, skipped ${result.skipped.length} files from ${opts.codebaseDir}`));
+      } catch (err) {
+        console.error(chalk.red(`--codebase-dir error: ${err.message}`));
         process.exit(1);
       }
     }
@@ -163,7 +180,8 @@ async function runOptimize(opts) {
 program
   .name('optimize-prompt')
   .description('Optimize prompts via an OpenAI-compatible LLM endpoint.')
-  .option('--codebase <path>', 'path to codebase index document')
+  .option('--codebase <path>', 'path to a single codebase index file')
+  .option('--codebase-dir <path>', 'path to a directory of .md tech docs (recursive scan)')
   .option('-o, --output <path>', 'output file path (default: stdout)')
   .action(runOptimize);
 
