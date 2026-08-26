@@ -17,14 +17,19 @@ Local CLI tool to optimize prompts via OpenAI-compatible LLM endpoints.
 
 ## Install
 
-### Via npm (recommended)
+### Via GitHub Packages (recommended)
+
+This package is published to GitHub Packages. Before installing, configure npm to resolve the `@frankxie-java` scope:
 
 ```bash
+# One-time setup: add scope registry to ~/.npmrc
+echo '@frankxie-java:registry=https://npm.pkg.github.com' >> ~/.npmrc
+
 # Global install — both `optimize-prompt` (CLI) and `optimize-prompt-mcp` (MCP server) available
-npm install -g optimize-prompt-mcp
+npm install -g @frankxie-java/optimize-prompt-mcp
 
 # Or use directly with npx (no install needed)
-npx optimize-prompt-mcp
+npx @frankxie-java/optimize-prompt-mcp
 ```
 
 ### From source (for development)
@@ -147,7 +152,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow, coding standard
   "mcpServers": {
     "optimize-prompt": {
       "command": "npx",
-      "args": ["-y", "optimize-prompt-mcp"]
+      "args": ["-y", "@frankxie-java/optimize-prompt-mcp"]
     }
   }
 }
@@ -159,7 +164,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow, coding standard
   "mcpServers": {
     "optimize-prompt": {
       "command": "npx",
-      "args": ["-y", "optimize-prompt-mcp"]
+      "args": ["-y", "@frankxie-java/optimize-prompt-mcp"]
     }
   }
 }
