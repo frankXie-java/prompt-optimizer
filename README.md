@@ -15,9 +15,75 @@ Local CLI tool to optimize prompts via OpenAI-compatible LLM endpoints.
 - **Minimal dependencies** — `commander`, `chalk`, `@modelcontextprotocol/sdk`, `zod`; everything else uses Node built-ins
 - **Privacy-first** — config stored locally with `0600` permissions, no telemetry
 
+## Quick Start
+
+1. **Configure npm scope** (one-time — needed because this package is on GitHub Packages):
+
+```bash
+echo '@frankxie-java:registry=https://npm.pkg.github.com' >> ~/.npmrc
+```
+
+2. **Initialize config** (one-time — sets your LLM endpoint, API key, and model):
+
+```bash
+npx -p @frankxie-java/optimize-prompt-mcp optimize-prompt init
+```
+
+You'll be prompted for:
+
+- `base_url` — e.g. `https://api.openai.com/v1`, `https://api.deepseek.com/v1`
+- `api_key` — your API key (`sk-...`)
+- `model` — e.g. `gpt-4o`, `deepseek-chat`
+- `docs_dir` — optional, path to a directory of `.md` tech docs (press Enter to skip)
+
+Config is saved to `~/.config/prompt-optimizer/config.json` with `0600` permissions.
+
+3. **Use as MCP server** (Cursor / Claude Desktop / OpenCode / Windsurf):
+
+**Cursor** (`~/.cursor/mcp.json`):
+```json
+{
+  "mcpServers": {
+    "optimize-prompt": {
+      "command": "npx",
+      "args": ["-y", "@frankxie-java/optimize-prompt-mcp"]
+    }
+  }
+}
+```
+
+**Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+```json
+{
+  "mcpServers": {
+    "optimize-prompt": {
+      "command": "npx",
+      "args": ["-y", "@frankxie-java/optimize-prompt-mcp"]
+    }
+  }
+}
+```
+
+Restart your IDE. The AI assistant can now call `optimize_prompt` to optimize prompts.
+
+4. **Or use as CLI**:
+
+```bash
+# Basic optimization (stdin → stdout)
+echo "write a login function" | npx -p @frankxie-java/optimize-prompt-mcp optimize-prompt
+
+# With tech docs context
+echo "implement auth module" | npx -p @frankxie-java/optimize-prompt-mcp optimize-prompt --codebase-dir ./docs
+
+# Output to file
+echo "implement auth module" | npx -p @frankxie-java/optimize-prompt-mcp optimize-prompt -o optimized.md
+```
+
+---
+
 ## Install
 
-### Via GitHub Packages (recommended)
+### Via GitHub Packages
 
 This package is published to GitHub Packages. Before installing, configure npm to resolve the `@frankxie-java` scope:
 
@@ -45,13 +111,21 @@ npm link
 
 ## Configure
 
+If you installed globally (`npm install -g`), use the short command:
+
 ```bash
 optimize-prompt init
 ```
 
+Otherwise use the npx form:
+
+```bash
+npx -p @frankxie-java/optimize-prompt-mcp optimize-prompt init
+```
+
 Interactive prompts for:
 
-- `base_url` — e.g. `https://api.example.com/v1`
+- `base_url` — e.g. `https://api.openai.com/v1`
 - `api_key` — your API key (`sk-...`)
 - `model` — model name (e.g. `gpt-4o`)
 - `docs_dir` — optional path to a directory of `.md` tech docs (press Enter to skip)
@@ -140,37 +214,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow, coding standard
 
 `prompt-optimizer` also ships as an MCP (Model Context Protocol) server, allowing AI IDEs and assistants like **Cursor**, **Claude Desktop**, and **Windsurf** to call `optimize_prompt` as a tool.
 
-### Quick Start
-
-1. Install and configure the CLI first (see [Install](#install) and [Configure](#configure) above).
-
-2. Add the MCP server to your AI IDE config:
-
-**Cursor** (`~/.cursor/mcp.json`):
-```json
-{
-  "mcpServers": {
-    "optimize-prompt": {
-      "command": "npx",
-      "args": ["-y", "@frankxie-java/optimize-prompt-mcp"]
-    }
-  }
-}
-```
-
-**Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
-```json
-{
-  "mcpServers": {
-    "optimize-prompt": {
-      "command": "npx",
-      "args": ["-y", "@frankxie-java/optimize-prompt-mcp"]
-    }
-  }
-}
-```
-
-3. Restart your IDE. The AI assistant can now call `optimize_prompt` to optimize prompts.
+See [Quick Start](#quick-start) step 3 above for IDE configuration examples.
 
 ### Tool: `optimize_prompt`
 
@@ -186,7 +230,7 @@ The tool returns the optimized prompt as text, or an error message if something 
 Set a default docs directory in your config so you don't need to pass `docsDir` every time:
 
 ```bash
-optimize-prompt init
+npx -p @frankxie-java/optimize-prompt-mcp optimize-prompt init
 # Follow prompts; enter your docs directory path for docs_dir (or press Enter to skip)
 ```
 

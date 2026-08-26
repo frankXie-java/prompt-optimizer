@@ -41,7 +41,15 @@ test('saveConfig sets file permission to 0600', withTempConfig(async () => {
 }));
 
 test('getConfigOrThrow throws when config missing', withTempConfig(async () => {
-  await assert.rejects(() => getConfigOrThrow(), /Config not found/);
+  await assert.rejects(
+    () => getConfigOrThrow(),
+    (err) => {
+      assert.match(err.message, /Config not found/);
+      // Error message must include the npx command for users without global install
+      assert.match(err.message, /npx -p @frankxie-java\/optimize-prompt-mcp/);
+      return true;
+    },
+  );
 }));
 
 test('getConfigOrThrow throws when field missing', withTempConfig(async () => {

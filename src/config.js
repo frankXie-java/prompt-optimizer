@@ -48,12 +48,16 @@ export async function saveConfig(cfg) {
 export async function getConfigOrThrow() {
   const cfg = await loadConfig();
   if (!cfg) {
-    throw new Error('Config not found. Run `optimize-prompt init` to initialize.');
+    throw new Error(
+      'Config not found. Run `optimize-prompt init` (if installed) or `npx -p @frankxie-java/optimize-prompt-mcp optimize-prompt init`.',
+    );
   }
   const required = ['base_url', 'api_key', 'model'];
   for (const key of required) {
     if (!cfg[key]) {
-      throw new Error(`Config missing required field: ${key}. Run \`optimize-prompt init\`.`);
+      throw new Error(
+        `Config missing required field: ${key}. Run \`optimize-prompt init\` (if installed) or \`npx -p @frankxie-java/optimize-prompt-mcp optimize-prompt init\`.`,
+      );
     }
   }
   return cfg;
