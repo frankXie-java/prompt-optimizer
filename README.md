@@ -17,6 +17,18 @@ Local CLI tool to optimize prompts via OpenAI-compatible LLM endpoints.
 
 ## Install
 
+### Via npm (recommended)
+
+```bash
+# Global install — both `optimize-prompt` (CLI) and `optimize-prompt-mcp` (MCP server) available
+npm install -g optimize-prompt-mcp
+
+# Or use directly with npx (no install needed)
+npx optimize-prompt-mcp
+```
+
+### From source (for development)
+
 ```bash
 git clone https://github.com/frankXie-java/prompt-optimizer.git
 cd prompt-optimizer
@@ -134,8 +146,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow, coding standard
 {
   "mcpServers": {
     "optimize-prompt": {
-      "command": "node",
-      "args": ["/absolute/path/to/prompt-optimizer/src/mcp/server.js"]
+      "command": "npx",
+      "args": ["-y", "optimize-prompt-mcp"]
     }
   }
 }
@@ -146,8 +158,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow, coding standard
 {
   "mcpServers": {
     "optimize-prompt": {
-      "command": "node",
-      "args": ["/absolute/path/to/prompt-optimizer/src/mcp/server.js"]
+      "command": "npx",
+      "args": ["-y", "optimize-prompt-mcp"]
     }
   }
 }
